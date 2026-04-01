@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  /* The "Houston" Color Palette */
+  --color-bayline-black: #080808;
+  --color-bayline-card: #121212;
+  --color-bayline-accent: #3b82f6;
+  --color-bayline-border: rgba(255, 255, 255, 0.1);
+
+  /* Typography - Tight tracking is key to this look */
+  --font-inter: "Inter", sans-serif;
+  --tracking-tightest: -0.06em;
+  --tracking-widest: 0.2em;
+}
+
+/* Base Styles */
+@layer base {
+  body {
+    @apply bg-bayline-black text-white antialiased font-inter;
+  }
+}
+
+@utility glass-nav {
+  background: rgba(8, 8, 8, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-bayline-border);
+}
+
+@utility section-divider {
+  border-top: 1px solid var(--color-bayline-border);
+  border-bottom: 1px solid var(--color-bayline-border);
+}
