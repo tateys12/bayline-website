@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Users, Radio, ChevronRight, Zap, Activity, Globe, Target, Fish, FireExtinguisher, Badge, BadgeCent, BadgeAlert, ShieldEllipsis, Building2, BadgeCheck, Flame, Waves, FishIcon, FlameIcon } from 'lucide-react';
@@ -150,115 +150,123 @@ const DEPT_DETAILS = {
     title: "Florida Highway Patrol",
     motto: "Service, Courtesy, Protection",
     longDesc: "The FHP is the premier state law enforcement agency. Our Troopers are trained in high-speed tactical interdiction, commercial vehicle enforcement, and state-wide traffic homicide investigation.",
-    features: ["Criminal Interdiction Unit", "Aviation Division", "Agressive Drivers Unit", "K-9 Unit", "Bureau of Criminal Investigations and Intelligence", "Commercial Vehicle Enforcement"],
-    image: fhpsunset 
+    features: ["Criminal Interdiction Unit", "Aviation Division", "Aggressive Drivers Unit", "K-9 Unit", "Bureau of Criminal Investigations and Intelligence", "Commercial Vehicle Enforcement", "Special Response Team"],
+    image: fhpsunset,
+    command: [
+      { callsign: "1101", name: "J. Miller" },
+      { callsign: "1102", name: "B. Nichols" },
+      { callsign: "1104", name: "J. Wilkins" }
+    ]
   },
   OPD: {
     title: "Orlando Police Dept",
     motto: "Keep Orlando Safe",
     longDesc: "Operating in the urban heart of Florida, OPD focuses on community-oriented policing, rapid response, and specialized tactical operations within city limits.",
-    features: ["S.W.A.T.", "K9 Unit", "Criminal Investigations"],
-    image: opdcruisers
+    features: ["S.W.A.T.", "K9 Unit", "Criminal Investigations Division"],
+    image: opdcruisers,
+    command: [
+      { callsign: "O-101", name: "L. Caruso" },
+      { callsign: "O-102", name: "R. Clark" }
+    ]
   },
   OCSO: {
     title: "Orange County Sheriff",
     motto: "Faithful Performance of Duty",
     longDesc: "Serving the vast Orange County territory with specialized tactical, aviation, and K9 units to ensure the safety of all residents and visitors.",
-    features: ["Aviation (Chase)", "Marine Unit", "Tactical Ops"],
-    image: ocsoexplorer
+    features: ["Aviation Division", "Marine Unit", "SWAT", "K-9 Unit", "Criminal Investigation Division"],
+    image: ocsoexplorer,
+    command: [
+      { callsign: "C-01", name: "A. Evans" },
+      { callsign: "C-02", name: "T. Reagan" },
+      { callsign: "C-03", name: "D. Blackstone" }
+    ]
   },
   OCFR: {
     title: "Orange County Fire & Rescue",
     motto: "Always Ready",
     longDesc: "Paramedic response, fire suppression, and technical rescue operations across the region with state-of-the-art equipment.",
     features: ["Fire Suppression", "EMS / Paramedic", "Technical Rescue"],
-    image: blrpfirescene
+    image: blrpfirescene,
+    command: [
+      { callsign: "N/A", name: "TBD" }
+    ]
   },
   FWC: {
     title: "Florida Fish & Wildlife",
     motto: "Conserving the Future",
     longDesc: "Protecting Florida's natural resources through waterborne patrol and rural land enforcement across the state's diverse ecosystems.",
     features: ["Airboat Patrol", "Wildlife Enforcement", "Marine Safety"],
-    image: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=800"
+    image: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=800",
+    command: [
+      { callsign: "N/A", name: "TBD" }
+    ]
   }
 };
 
-const DepartmentProfile = ({ data, logo }) => (
-  <section className="group relative py-20">
-    {/* HOVER GLOW EFFECT - Subtle red ambient light */}
-    <div className="absolute inset-0 bg-red-600/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+const DepartmentProfile = ({ id, data, logo }) => (
+  <section className="group relative py-20 border-b border-white/[0.03] last:border-0">
+    <div className="absolute inset-0 bg-red-600/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
     <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch">
-      
-      {/* LEFT: THE BADGE CONTAINER (Removed Grayscale) */}
+      {/* BADGE SIDE */}
       <div className="w-full lg:w-1/3 flex flex-col">
-        <div className="relative aspect-square bg-[#1A1A1A] border border-white/5 flex items-center justify-center overflow-hidden group-hover:border-red-600/30 transition-all duration-700 shadow-2xl">
-           {/* LARGE WATERMARK */}
-           <span className="absolute -bottom-6 -right-6 text-[10rem] font-black italic text-white/[0.02] group-hover:text-red-600/[0.03] uppercase tracking-tighter select-none transition-colors duration-700">
-             {data.id}
-           </span>
-           
-           <img 
-             src={logo} 
-             alt={data.title} 
-             className="w-56 h-56 object-contain z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform duration-700" 
-             /* Removed the scale-110 and rotate on hover to keep the badge looking professional and stable */
-           />
+        <div className="relative aspect-square bg-[#0A0A0A] border border-white/5 flex items-center justify-center overflow-hidden group-hover:border-red-600/20 transition-all duration-700">
+          <span className="absolute -bottom-6 -right-6 text-[12rem] font-black italic text-white/[0.01] group-hover:text-red-600/[0.02] uppercase select-none transition-colors duration-700">
+            {id}
+          </span>
+          <img 
+            src={logo} 
+            alt={data.title} 
+            className="w-64 h-64 object-contain z-10 drop-shadow-2xl transition-transform duration-700 group-hover:scale-105" 
+          />
         </div>
       </div>
 
-      {/* RIGHT: THE CONTENT AREA */}
-      <div className="w-full lg:w-2/3 flex flex-col justify-between py-2">
-        {/* TOP SECTION: TITLE & DESCRIPTION */}
+      {/* DATA SIDE */}
+      <div className="w-full lg:w-2/3 flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-4 mb-4">
             <div className="h-[1px] w-12 bg-red-600" />
             <p className="text-red-600 text-[10px] font-black uppercase tracking-[0.5em] italic">{data.motto}</p>
           </div>
           
-          <h2 className="text-6xl font-black uppercase italic tracking-tighter text-white mb-8 leading-none group-hover:translate-x-2 transition-transform duration-500">
+          <h2 className="text-5xl lg:text-7xl font-black uppercase italic tracking-tighter text-white mb-6 leading-none group-hover:translate-x-2 transition-transform duration-500">
             {data.title}
           </h2>
           
-          <p className="text-gray-400 leading-relaxed text-xl font-medium italic border-l-2 border-red-600/20 pl-8 mb-12">
+          <p className="text-gray-400 leading-relaxed text-lg font-medium italic border-l-2 border-red-600/20 pl-8 mb-10 max-w-3xl">
             "{data.longDesc}"
           </p>
         </div>
 
-        {/* BOTTOM SECTION: TWO-COLUMN DATA GRID */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-end">
-          {/* SPECIALIZED DIVISIONS */}
-          <div className="bg-white/[0.02] p-8 border border-white/5 group-hover:bg-white/[0.04] transition-colors duration-500">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-8 border-b border-white/5 pb-2 uppercase italic">
-              Operational Sub-Divisions
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* DIVISIONS LIST */}
+          <div className="bg-white/[0.01] p-6 border border-white/5">
+            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 mb-6 border-b border-white/5 pb-2 italic">
+              Operational Divisions
             </h4>
-            <ul className="grid grid-cols-1 gap-4">
+            <ul className="space-y-3">
               {data.features.map(f => (
-                <li key={f} className="flex items-center gap-4 group/item">
-                  <div className="w-1.5 h-[1px] bg-red-600 group-hover/item:w-4 transition-all" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 group-hover/item:text-white transition-colors">{f}</span>
+                <li key={f} className="flex items-center gap-3 group/item">
+                  <div className="w-1 h-[1px] bg-red-600 group-hover/item:w-3 transition-all" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover/item:text-white transition-colors">{f}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* STATUS & COMMAND */}
-          <div className="flex flex-col justify-between h-full py-2">
-            <div className="mb-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-4 italic">Authority Status</h4>
-              <div className="px-4 py-2 bg-red-600/10 border border-red-600/20 inline-flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
-                <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">Active Recruitment</span>
-              </div>
-            </div>
-            
+          {/* COMMAND STAFF */}
+          <div className="flex flex-col justify-end">
             <div className="pt-6 border-t border-white/5">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-2">Internal Command</h4>
-              <div className="flex flex-col gap-1">
-                <p className="text-[11px] font-black text-white tracking-widest uppercase italic">Department Administration</p>
-                <p className="text-[9px] font-bold text-gray-600 tracking-widest uppercase">
-                  1101 | J. Miller &nbsp;&nbsp; 1102 | B. Nichols &nbsp;&nbsp; 1104 | J. Wilkins
-                </p>
+              <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 mb-3 italic">Internal Command</h4>
+              <p className="text-[10px] font-black text-white tracking-widest uppercase italic mb-3">Administration & Oversight</p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {data.command?.map((staff) => (
+                  <div key={staff.callsign} className="flex flex-col">
+                    <span className="text-[12px] font-black text-red-600 italic leading-none">{staff.callsign}</span>
+                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-tighter">{staff.name}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -381,19 +389,11 @@ const About = () => {
                 </p>
               </div>
             </div>
-
-            <div className="p-8 border border-dashed border-white/10 flex flex-col items-center text-center">
-               <p className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.5em]">Authored By</p>
-               <p className="text-white font-black uppercase italic tracking-tighter mt-2">Bayline Leadership Team</p>
-            </div>
             {/* FINAL SIGNATURE BOX */}
 <div className="mt-32 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-start gap-8 opacity-40 hover:opacity-100 transition-opacity">
-  <div>
-    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-red-600 mb-2">Authenticated By</p>
-    <p className="text-xl font-black uppercase italic tracking-tighter text-white">Bayline Leadership Team</p>
-  </div>
+  
   <div className="text-right">
-    <p className="text-[9px] font-bold uppercase tracking-widest text-gray-500 italic">
+    <p className="text-[12px] font-bold uppercase tracking-widest text-gray-500 italic">
       "Built with Purpose. Started with You."
     </p>
   </div>
@@ -752,25 +752,110 @@ const Home = () => {
   );
 };
 
+const Footer = () => (
+  <footer className="relative bg-[#0A0A0A] border-t border-white/[0.03] pt-20 pb-10 overflow-hidden">
+    {/* BACKGROUND WATERMARK */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[15rem] font-black italic text-white/[0.01] uppercase select-none pointer-events-none tracking-tighter">
+      BAYLINE
+    </div>
+
+    <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+        
+        {/* LOGO & AUTHENTICATION */}
+        <div className="lg:col-span-2">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-8 h-8 bg-red-600 flex items-center justify-center text-white font-black italic">B</div>
+            <span className="text-xl font-black italic tracking-tighter text-white uppercase">Bayline Roleplay</span>
+          </div>
+          <p className="text-gray-500 text-sm max-w-sm mb-8 leading-relaxed italic">
+            Maintaining the highest standards of simulation and professionalism across the State of Florida since inception.
+          </p>
+          
+          {/* LEADERSHIP AUTHENTICATION BOX */}
+          <div className="inline-flex flex-col border-l-2 border-red-600 pl-6 py-2">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Authenticated By</span>
+            <span className="text-white text-sm font-black uppercase tracking-widest italic">Bayline Leadership Team</span>
+          </div>
+        </div>
+
+        {/* QUICK NAVIGATION UPDATE */}
+<div>
+  <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white mb-8 italic">Quick Access</h4>
+  <ul className="space-y-4">
+    {['Home', 'About', 'Departments', 'Media'].map((item) => (
+      <li key={item}>
+        <Link 
+          // If the item is "Home", use "/", otherwise use the lowercase name
+          to={item === 'Home' ? "/" : `/${item.toLowerCase()}`} 
+          className="text-gray-500 hover:text-red-600 text-[10px] font-black uppercase tracking-widest transition-colors flex items-center gap-2 group"
+        >
+          <div className="w-0 h-[1px] bg-red-600 group-hover:w-4 transition-all" />
+          {item}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
+
+        {/* EXTERNAL ASSETS */}
+        <div>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white mb-8 italic">External</h4>
+          <ul className="space-y-4">
+            <li>
+              <a href="https://discord.gg/baylinerp" className="text-gray-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">Discord Communications</a>
+            </li>
+            <li>
+              <a href="https://servers.fivem.net/servers/detail/jdemyp" className="text-gray-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">Server Status</a>
+            </li>
+            <li>
+              <a href="https://imperialcad.app/home/blrp1" className="text-gray-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">CAD System</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* BOTTOM STRIP */}
+      <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <span className="text-[9px] font-bold text-gray-700 uppercase tracking-[0.5em]">
+          &copy; 2026 Bayline Roleplay. All Rights Reserved.
+        </span>
+        <div className="flex items-center gap-8">
+          <div className="h-4 w-[1px] bg-white/10" />
+          <span className="text-[9px] font-bold text-gray-700 uppercase tracking-[0.5em]">NHTSA Certified</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
+
 // --- MAIN WRAPPER ---
+
+// HELPER: Fixes scroll position when changing pages
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-red-500">
+    // 'flex flex-col' and 'min-h-screen' keep the footer at the bottom
+    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-red-500 flex flex-col">
+      <ScrollToTop />
+      
       {/* NAVBAR */}
       <nav className="fixed top-0 w-full z-50 bg-[#121212]/95 backdrop-blur-xl border-b border-white/[0.03] px-10 py-6 flex justify-between items-center">
-        
-        {/* LOGO + BRAND SECTION */}
         <Link to="/" className="flex items-center gap-4 group">
           <div className="relative flex items-center justify-center">
-            {/* LOGO IMAGE with Alt Fallback */}
             <img 
               src={blrplogo} 
               alt="BLRP" 
               className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(220,38,38,0.5)] group-hover:scale-110 transition-transform duration-300"
-              onError={(e) => { e.target.style.display = 'none'; }} // Hides broken icon if path is wrong
+              onError={(e) => { e.target.style.display = 'none'; }}
             />
-            {/* Ambient Glow behind logo */}
             <div className="absolute inset-0 bg-red-600/20 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
           </div>
 
@@ -779,7 +864,6 @@ function App() {
           </span>
         </Link>
         
-        {/* NAV LINKS */}
         <div className="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.4em] font-black text-gray-500 items-center">
           <Link to="/" className="hover:text-red-500 transition-colors">Home</Link>
           <Link to="/departments" className="hover:text-red-500 transition-colors">Departments</Link>
@@ -788,15 +872,21 @@ function App() {
         </div>
       </nav>
 
-      <AnimatePresence mode="wait">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/departments" element={<DepartmentsPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/media" element={<MediaPage />} />
-          <Route path="/apply" element={<div className="pt-40 text-center uppercase tracking-widest text-red-500 font-black">Link Established // https://discord.gg/baylinerp</div>} />
-        </Routes>
-      </AnimatePresence>
+      {/* MAIN CONTENT AREA - 'flex-grow' pushes footer down */}
+      <main className="flex-grow">
+        <AnimatePresence mode="wait">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/departments" element={<DepartmentsPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/media" element={<MediaPage />} />
+            <Route path="/apply" element={<div className="pt-60 pb-40 text-center uppercase tracking-widest text-red-500 font-black">Link Established // https://discord.gg/baylinerp</div>} />
+          </Routes>
+        </AnimatePresence>
+      </main>
+
+      {/* GLOBAL FOOTER */}
+      {<Footer />}
     </div>
   );
 }
