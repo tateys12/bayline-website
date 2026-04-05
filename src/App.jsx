@@ -720,17 +720,17 @@ const Home = () => {
             onClick={() => setSelectedDept('FHP')}
           />
           <DeptCard 
-            image={opdLogo} id="OPD" name="Orlando Police Dept" 
+            image={opdLogo} id="OPD" name="Orlando Police Department" 
             desc="Urban enforcement and community protection within the heart of the city." 
             onClick={() => setSelectedDept('OPD')}
           />
           <DeptCard 
-            image={ocsoLogo} id="OCSO" name="Orange County Sheriff" 
+            image={ocsoLogo} id="OCSO" name="Orange County Sheriffs Office" 
             desc="Serving vast territory with specialized tactical, aviation, and K9 units." 
             onClick={() => setSelectedDept('OCSO')}
           />
           <DeptCard 
-            image={ocfrLogo} id="OCFR" name="Orange County Fire Rescue" 
+            image={ocfrLogo} id="OCFR" name="Orange County Fire & Rescue" 
             desc="Paramedic response and technical rescue operations across the region." 
             onClick={() => setSelectedDept('OCFR')}
           />
