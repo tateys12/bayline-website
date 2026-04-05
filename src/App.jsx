@@ -159,10 +159,10 @@ const DEPT_DETAILS = {
     ]
   },
   OPD: {
-    title: "Orlando Police Dept",
+    title: "Orlando Police Department",
     motto: "Keep Orlando Safe",
     longDesc: "Operating in the urban heart of Florida, OPD focuses on community-oriented policing, rapid response, and specialized tactical operations within city limits.",
-    features: ["S.W.A.T.", "K9 Unit", "Criminal Investigations Division"],
+    features: ["S.W.A.T.", "Aviation Division", "K9 Unit", "Criminal Investigations Division", "DUI Enforcement", "Motors Unit", "Marine Patrol"],
     image: opdcruisers,
     command: [
       { callsign: "O-101", name: "L. Caruso" },
@@ -170,10 +170,10 @@ const DEPT_DETAILS = {
     ]
   },
   OCSO: {
-    title: "Orange County Sheriff",
+    title: "Orange County Sheriffs Office",
     motto: "Faithful Performance of Duty",
     longDesc: "Serving the vast Orange County territory with specialized tactical, aviation, and K9 units to ensure the safety of all residents and visitors.",
-    features: ["Aviation Division", "Marine Unit", "SWAT", "K-9 Unit", "Criminal Investigation Division"],
+    features: ["S.W.A.T.", "Aviation Division", "K9 Unit", "Criminal Investigations Division", "Marine Patrol", "Motors Unit", "DUI Enforcement"],
     image: ocsoexplorer,
     command: [
       { callsign: "C-01", name: "A. Evans" },
@@ -196,7 +196,7 @@ const DEPT_DETAILS = {
     motto: "Conserving the Future",
     longDesc: "Protecting Florida's natural resources through waterborne patrol and rural land enforcement across the state's diverse ecosystems.",
     features: ["Airboat Patrol", "Wildlife Enforcement", "Marine Safety"],
-    image: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=800",
+    image: "",
     command: [
       { callsign: "N/A", name: "TBD" }
     ]
